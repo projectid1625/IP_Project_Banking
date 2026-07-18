@@ -15,7 +15,7 @@ print(r"""
       
 """)
 
-print('\n',' '*4,'IP Project by Ujjwal Pratap Singh','\n' + '-'*60)
+print('\n',' '*4,'IP Project by Ujjwal Pratap Singh','\n', ' '*10 , 'and Kashish Singh', '\n' + '-'*60)
 
 print(r"""
 
@@ -47,10 +47,14 @@ match operation:
 
         SQL_connector.deposit_money()
 
+    case 7:
+
+        SQL_connector.personal_transaction()
+
     case 9:
 
         SQL_connector.search_account()
 
     case 11:
 
-        exit('safe')
+        exit('Program executed')

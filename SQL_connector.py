@@ -1,4 +1,5 @@
 import mysql.connector as sqlconn
+import pandas as pd
 
 conn = sqlconn.connect( user='root',password='Engineer',host='localhost' )
 
@@ -228,3 +229,44 @@ def deposit_money():
     else:
 
         print('\n','Sorry an error occured from our side...', '\n')
+
+def personal_transaction():
+
+    name = str(input('Enter your PyBank Account name: '))
+    pin = int(input('Enter your PyBank account PIN: '))
+
+    cur.execute('SELECT * FROM Accounts WHERE Name = %s and PIN = %s;', (name,pin))
+
+    output = cur.fetchall()
+
+    if len(output) == 0:
+
+        print('No such account with these details found !!')
+
+    elif len(output) == 1:
+
+        account_id = output[0][0]
+
+        cur.execute('SELECT * FROM Transactions WHERE TFrom=%s and TfromAccount=%s;', (name,account_id))
+
+        output = cur.fetchall()
+
+        if len(output) == 0:
+
+            print('No Transactions from this account had been made yet !!')
+
+        else:
+
+            new_output = [row[1:] for row in output]
+
+            data = pd.DataFrame(new_output, index=[row[0] for row in output], columns=[
+
+                'Account ID', 'FROM', 'TO', 'Transaction Type', 'Amount', 'Date', 'Time'
+
+            ])
+
+            print('\n', '-'*60, '\n', data)
+
+    else:
+
+        print('Sorry ! Found 2 similar accounts with same name and PIN... :(')
